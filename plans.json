@@ -1,7 +1,6 @@
 {
   "2014-01-01T00:00:00.000Z": {
-    "Basic": "./src/basic.js",
-    "Pro": "./src/pro.js",
-    "Business": "./src/business.js"
+    "basic": "./src/basic.js",
+    "unlim": "./src/unlim.js"
   }
 }

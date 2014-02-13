@@ -2,28 +2,32 @@
 
 var BigNumber = require('bignumber.js');
 
-var upperLimitMb = BigNumber(1024).times(16);
+var contactPrice = BigNumber(0.3);
+var maxPrice = BigNumber(5000); //BigNumber(600) * contactPrice;
 var min = function(x, y) { return x.comparedTo(y) < 0 ? x : y };
-var quotaMb = function(invites) { return min(BigNumber(2048).plus(BigNumber(512).times(invites)), upperLimitMb) };
 
 module.exports = {
 
   cycles: {
     $subscription: {
-      storageUsedMb: {},
-      invites: {}
+      $begin: ['monthly']
+    },
+    monthly: {
+      $duration: "1 month",
+      coverage: {
+        sum: {
+          aggr: function(x,y){ return BigNumber(x).plus(y) },
+          init: function(x) { return 0 }
+        }
+      },
+      rub: {
+        $cost: function(coverage$sum) { return min(BigNumber(coverage$sum).times(contactPrice), maxPrice) }
+      }
     }
   },
 
-  values: {
-    storageQuotaMb: function(invites) { return quotaMb(invites) }
-  },
-
   notifications: {
-    storage10pcntLeft: function(storageUsedMb, storageQuotaMb) {
-      return BigNumber(storageUsedMb).gt(BigNumber(storageQuotaMb).times(0.9))
-    },
-    storageOverUsed: function(storageUsedMb, storageQuotaMb) { return BigNumber(storageUsedMb).gt(storageQuotaMb) }
+    rubBelow0: function(rub) { return BigNumber(rub).lt(0) }
   }
 
 };
