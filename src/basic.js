@@ -3,7 +3,7 @@
 var BigNumber = require('bignumber.js');
 
 var contactPrice = BigNumber(0.3);
-var maxPrice = BigNumber(5000); //BigNumber(600) * contactPrice;
+var maxPrice = BigNumber(7000); //BigNumber(600) * contactPrice;
 var min = function(x, y) { return x.comparedTo(y) < 0 ? x : y };
 
 module.exports = {
